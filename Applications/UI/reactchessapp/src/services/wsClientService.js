@@ -1,0 +1,1 @@
+export const WsGameClient = new WebSocket(process.env.REACT_WS_GAMESERVER);

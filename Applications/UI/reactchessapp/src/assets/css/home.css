@@ -1,0 +1,22 @@
+.center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.center h1, p{
+    font-family: 'M PLUS 1 Code', sans-serif;
+}
+.bg-image{
+  height: 100vh;
+  background-image: url('../images/background.png');
+}
+.blur-effect{
+  filter: blur(8px);
+  -webkit-filter: blur(8px);
+}
+.blur-effect-sm{
+  filter: blur(2px);
+  -webkit-filter: blur(2px);
+}

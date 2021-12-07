@@ -1,0 +1,47 @@
+.play-ground {
+  position: absolute;
+  width: 1000px;
+  height: 1000px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.chess-position {
+  position: relative;
+  width: 100px;
+  height: 100px;
+  margin: auto;
+}
+.play-ground .black {
+  background-color: #7d945d;
+}
+.play-ground .white {
+  background-color: #eeeed5;
+}
+.chess-piece {
+  position: absolute;
+  height: 95px !important;
+  top: 50%;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.play-ground .active {
+  background-color: #1d26a8;
+}
+.play-ground .predict {
+  background-color: gold;
+}
+.bounce {
+  animation: bounce 0.5s;
+  -webkit-animation: bounce 0.5s;
+}
+
+@keyframes bounce {
+  from {
+    margin-top: 0;
+  }
+  to {
+    margin-top: -15px;
+  }
+}
