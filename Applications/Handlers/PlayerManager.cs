@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ChessApp.Applications.Interfaces;
 using ChessApp.Applications.Models;
 
@@ -10,10 +11,12 @@ namespace ChessApp.Applications.Handlers
     {
         public ConcurrentDictionary<string, User> OnlinePlayers { get; set; }
         private readonly ILogging _logging;
-        public PlayerManager(ILogging logging)
+        private readonly IPlayerService _playerService;
+        public PlayerManager(ILogging logging, IPlayerService playerService)
         {
             _logging = logging;
             OnlinePlayers = new ConcurrentDictionary<string, User>();
+            _playerService = playerService;
         }
 
         public List<User> GetPlayers()
@@ -63,7 +66,7 @@ namespace ChessApp.Applications.Handlers
             }
         }
 
-        public void RemovePlayer(User user)
+        public void RemovePlayer(User user) 
         {
             RemovePlayer(user.SessionId);
         }
@@ -71,6 +74,17 @@ namespace ChessApp.Applications.Handlers
         public bool ExistPlayer(string clientId)
         {
             return OnlinePlayers.Any(player => player.Key.Equals(clientId));
+        }
+
+        public Player LoginPlayer(string username, string password)
+        {
+            var result = _playerService.Login(username,password);
+            return result;
+        }
+
+        public bool LogoutPlayer(System.Guid clientId)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

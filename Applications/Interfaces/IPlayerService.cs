@@ -8,6 +8,7 @@ namespace ChessApp.Applications.Interfaces
     public interface IPlayerService
     {
          Task<IEnumerable<Player>> GetPlayersAsync();
+         Player Login(string username, string password);
          Task<Player> GetPlayerAsync(Guid id);
          Task<Player> CreatePlayerAsync(Player player);
          Task<Player> UpdatePlayerAsync(Guid id, Player player);

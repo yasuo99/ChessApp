@@ -24,9 +24,12 @@ namespace ChessApp
             {
                 services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(ConnectionString));
                 services.AddSingleton<ILogging, Logging>();
-                services.AddSingleton<IPlayerService, PlayerService>();
+                services.AddSingleton<IMatchManager, MatchManager>();
+                services.AddScoped<IMatchService, MatchService>();
                 services.AddScoped<IDapperService, DapperService>();
-                services.AddSingleton<IPlayerManager,PlayerManager>();
+                services.AddScoped<IPlayerService, PlayerService>();
+                services.AddScoped<IPlayerManager, PlayerManager>();
+                
             });
             return host;
         }
@@ -41,8 +44,12 @@ namespace ChessApp
             var playerService = host.Services.GetRequiredService<IPlayerService>();
 
             var playerManagerService = host.Services.GetRequiredService<IPlayerManager>();
-            WsGameServer wsGameServer = new WsGameServer(IPAddress.Any, 8080, loggingService, playerManagerService);
-            wsGameServer.StartServer();  
+
+            var matchService = host.Services.GetRequiredService<IMatchService>();
+
+            WsGameServer wsGameServer = new WsGameServer(IPAddress.Any, 8080,
+            loggingService, playerManagerService, matchService, playerService);
+            wsGameServer.StartServer();
             for (; ; )
             {
                 var cmd = Console.ReadLine();
@@ -57,11 +64,14 @@ namespace ChessApp
                 {
                     wsGameServer.RestartServer();
                 }
-                if(cmd == "get players"){
+                if (cmd == "get players")
+                {
                     var result = await Task.FromResult(dapperService.GetAll<Player>($"GetPlayers", null, commandType: CommandType.StoredProcedure));
                 }
-                if(cmd == "create player"){
-                    var player = new Player{
+                if (cmd == "create player")
+                {
+                    var player = new Player
+                    {
                         Id = Guid.NewGuid(),
                         Username = "Thanhpro1233",
                         Password = "Thanhpro1@",
@@ -72,8 +82,10 @@ namespace ChessApp
                     parameter.Add("@password", player.Password, DbType.String);
                     dapperService.Execute<Player>($"Insert into player(id, username,password, wincount, losecount, drawcount) values(@id,@username, @password, 0, 0, 0)", parameter, commandType: CommandType.Text);
                 }
-                if(cmd == "check"){
-                    var player = new Player{
+                if (cmd == "check")
+                {
+                    var player = new Player
+                    {
                         Id = Guid.NewGuid(),
                         Username = "Thanhpro12",
                         Password = "Thanhpro1@",

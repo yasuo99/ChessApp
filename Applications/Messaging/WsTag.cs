@@ -6,6 +6,8 @@ namespace ChessApp.Applications.Messaging
         Login,
         GetLobbies,
         JoinLobby,
+        CreateMatch,
+        CancelMatch,
         StartMatch,
         InitBoard,
         MoveChess,
@@ -13,6 +15,7 @@ namespace ChessApp.Applications.Messaging
         Attack,
         Draw,
         DrawAccept,
-        EndMatch
+        EndMatch,
+        PauseMatch
     }
 }

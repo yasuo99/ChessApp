@@ -14,6 +14,8 @@ namespace ChessApp.Applications.Models
         public Guid OpponentId { get; set; }
         [ForeignKey(nameof(OpponentId))]
         public virtual Player Opponent { get; set; }
+        public DateTime StartAt { get; set; }
+        public DateTime EndAt { get; set; }
         public MatchResult MatchResult { get; set; }
     }
     public enum MatchResult{

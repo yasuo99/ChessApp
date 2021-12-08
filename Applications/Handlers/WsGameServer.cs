@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using ChessApp.Applications.Interfaces;
 using ChessApp.Applications.Models;
@@ -11,16 +12,20 @@ namespace ChessApp.Applications.Handlers
         private IPAddress _address;
         private readonly ILogging _logging;
         private readonly IPlayerManager _playerManager;
-        public WsGameServer(IPAddress address, int port, ILogging logging, IPlayerManager playerManager) : base(address, port)
+        private readonly IPlayerService _playerService;
+        private readonly IMatchService _matchService;
+        public WsGameServer(IPAddress address, int port, ILogging logging, IPlayerManager playerManager, IMatchService matchService, IPlayerService playerService) : base(address, port)
         {
             _port = port;
             _logging = logging;
             _playerManager = playerManager;
+            _matchService = matchService;
+            _playerService = playerService;
         }
         protected override TcpSession CreateSession()
         {
             _logging.Info($"New connected {this.Id}");
-            User user = new User(this, _logging);
+            User user = new User(this, _logging, _matchService, _playerManager);
             _playerManager.AddPlayer(user);
             return user;
         }

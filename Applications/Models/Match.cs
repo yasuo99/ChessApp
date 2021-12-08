@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ChessApp.Applications.Messaging.Constants;
 using ChessApp.Applications.Models.Constants;
 
 namespace ChessApp.Applications.Models
@@ -22,16 +23,16 @@ namespace ChessApp.Applications.Models
                 return _chesses;
             }
         }
-        private Player _host;
-        public Player Host
+        private User _host;
+        public User Host
         {
             get
             {
                 return this._host;
             }
         }
-        private Player _opponent;
-        public Player Opponent
+        private User _opponent;
+        public User Opponent
         {
             get
             {
@@ -53,17 +54,42 @@ namespace ChessApp.Applications.Models
                 return _opponentKilled;
             }
         }
-
-        public Match(Player host, Player opponent, List<ChessPiece> chesses)
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+        }
+        private bool _isPause;
+        public bool IsPause
+        {
+            get { return IsPause; }
+        }
+        private MatchStatus _status;
+        public string Status{
+            get{
+                return _status.ToString();
+            }
+        }
+        public Match(User host, string title = null, User opponent = null)
         {
 
             _host = host;
             _opponent = opponent;
-            _chesses = chesses;
             _matchId = Guid.NewGuid();
             _hostKilled = new List<ChessPiece>();
             _opponentKilled = new List<ChessPiece>();
+            _title = title ?? $"Match of {host.Player.Username}";
+        }
+        public void InitChesses(){
 
+        }
+        public void SetTitle(Guid hostId ,string title){
+            if(_host.Id == hostId){
+                this._title = title;
+            }
+        }
+        public void SetPause(bool value){
+            this._isPause = value;
         }
     }
 }

@@ -4,14 +4,16 @@ using ChessApp.Applications.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ChessApp.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20211207063526_UpdateMatchHistory")]
+    partial class UpdateMatchHistory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,7 +41,7 @@ namespace ChessApp.Migrations
                     b.Property<Guid>("OpponentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("StartAt")
+                    b.Property<DateTime>("StartAd")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");

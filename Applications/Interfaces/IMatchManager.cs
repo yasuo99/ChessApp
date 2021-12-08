@@ -1,12 +1,18 @@
 using System;
+using System.Collections;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using ChessApp.Applications.Models;
 
 namespace ChessApp.Applications.Interfaces
 {
     public interface IMatchManager
     {
-        ConcurrentDictionary<Guid, Match> matches{get;set;}
+        IEnumerable<Match> GetMatches();
+        Match GetMatch(string hostId);
+        Match GetMatch(Guid matchId);
+        bool ExistMatch(Guid matchId);
+        bool ExistMatch(string hostId);
         void AddMatch(Match match);
         void RemoveMatch(Match match);
         void RemoveMatch(Guid matchId);

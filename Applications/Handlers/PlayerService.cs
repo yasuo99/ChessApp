@@ -12,6 +12,8 @@ namespace ChessApp.Applications.Handlers
     {
         private readonly IDapperService _dapperService;
         private const string CREATE_PROCEDURE = "CreatePlayer";
+        private const string GET_PROCEDURE = "GetPlayer";
+        private const string LOGIN_PROCEDURE = "SP_Login";
         private const string EXIST_PROCEDURE = "ExistPlayer";
         public PlayerService(IDapperService dapperService)
         {
@@ -64,6 +66,14 @@ namespace ChessApp.Applications.Handlers
         public Task<Player> UpdatePlayerAsync(Guid id, Player player)
         {
             throw new NotImplementedException();
+        }
+
+        public Player Login(string username, string password)
+        {
+            var parameters = new DynamicParameters();
+            parameters.Add("@username", username, DbType.String, ParameterDirection.Input);
+            parameters.Add("@password", password, DbType.String, ParameterDirection.Input);
+            return _dapperService.Get<Player>(LOGIN_PROCEDURE, parameters);
         }
     }
 }
