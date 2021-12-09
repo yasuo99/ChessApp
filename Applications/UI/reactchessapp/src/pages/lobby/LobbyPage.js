@@ -1,6 +1,8 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import '../../assets/css/home.css'
 import '../../assets/css/lobby.css'
+import {WsGameClient} from '../../services/wsClientService'
 const LobbyPage = ({ }) => {
     const navigate = useNavigate();
     const searchLobby = (event) => {
@@ -8,6 +10,11 @@ const LobbyPage = ({ }) => {
             console.log('User press enter');
         }
     }
+    useEffect(() => {
+        WsGameClient.onmessage = (event) => {
+            console.log(event.data);
+        }
+    },[])
     return (
         <div>
 

@@ -62,7 +62,7 @@ namespace ChessApp.Applications.Models
         private bool _isPause;
         public bool IsPause
         {
-            get { return IsPause; }
+            get { return _isPause; }
         }
         private MatchStatus _status;
         public string Status{
@@ -79,6 +79,7 @@ namespace ChessApp.Applications.Models
             _hostKilled = new List<ChessPiece>();
             _opponentKilled = new List<ChessPiece>();
             _title = title ?? $"Match of {host.Player.Username}";
+            _status = MatchStatus.Waiting;
         }
         public void InitChesses(){
 

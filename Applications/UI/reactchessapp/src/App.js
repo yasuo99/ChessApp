@@ -8,6 +8,8 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import {WsGameClient} from '../src/services/wsClientService'
+import { useEffect } from 'react';
 
 const App = ({ }) => {
   const mapRoute = (routes) => {

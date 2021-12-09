@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Data;
 using System.Net;
 using System.Threading.Tasks;
+using AutoMapper;
 using ChessApp.Applications.Database;
 using ChessApp.Applications.Handlers;
+using ChessApp.Applications.Helpers;
 using ChessApp.Applications.Interfaces;
 using ChessApp.Applications.Models;
 using Dapper;
@@ -25,11 +27,12 @@ namespace ChessApp
                 services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(ConnectionString));
                 services.AddSingleton<ILogging, Logging>();
                 services.AddSingleton<IMatchManager, MatchManager>();
+                services.AddAutoMapper(typeof(AutomapperProfile));
                 services.AddScoped<IMatchService, MatchService>();
                 services.AddScoped<IDapperService, DapperService>();
                 services.AddScoped<IPlayerService, PlayerService>();
                 services.AddScoped<IPlayerManager, PlayerManager>();
-                
+
             });
             return host;
         }
@@ -46,9 +49,9 @@ namespace ChessApp
             var playerManagerService = host.Services.GetRequiredService<IPlayerManager>();
 
             var matchService = host.Services.GetRequiredService<IMatchService>();
-
+            var mapperService = host.Services.GetRequiredService<IMapper>();
             WsGameServer wsGameServer = new WsGameServer(IPAddress.Any, 8080,
-            loggingService, playerManagerService, matchService, playerService);
+            loggingService, playerManagerService, matchService, playerService, mapperService);
             wsGameServer.StartServer();
             for (; ; )
             {
@@ -82,7 +85,8 @@ namespace ChessApp
                     parameter.Add("@password", player.Password, DbType.String);
                     dapperService.Execute<Player>($"Insert into player(id, username,password, wincount, losecount, drawcount) values(@id,@username, @password, 0, 0, 0)", parameter, commandType: CommandType.Text);
                 }
-                if(cmd == "ping"){
+                if (cmd == "ping")
+                {
                     wsGameServer.SendAll("This is message from server");
                 }
                 if (cmd == "check")

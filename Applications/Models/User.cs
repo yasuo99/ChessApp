@@ -1,6 +1,10 @@
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using ChessApp.Applications.Handlers;
 using ChessApp.Applications.Helpers;
 using ChessApp.Applications.Interfaces;
@@ -27,13 +31,15 @@ namespace ChessApp.Applications.Models
         private readonly ILogging _logger;
         private readonly IMatchService _matchService;
         private readonly IPlayerManager _playerManager;
-        public User(WsServer server, ILogging logger, IMatchService matchService, IPlayerManager playerManager) : base(server)
+        private readonly IMapper _mapper;
+        public User(WsServer server, ILogging logger, IMatchService matchService, IPlayerManager playerManager, IMapper mapper) : base(server)
         {
             SessionId = this.Id.ToString();
             _sessionId = this.Id;
             _logger = logger;
             _matchService = matchService;
             _playerManager = playerManager;
+            _mapper = mapper;
         }
         public override void OnWsConnected(HttpRequest request)
         {
@@ -68,7 +74,7 @@ namespace ChessApp.Applications.Models
                     }
                     else
                     {
-                          this.SendMessage(GameHelper.SerializedObject(WsResponse.Success<string>($"{this._player.Username} already logged in", null)));
+                        this.SendMessage(GameHelper.SerializedObject(WsResponse.Success<string>($"{this._player.Username} already logged in", null)));
                     }
                     break;
                 case WsTag.Register:
@@ -77,17 +83,30 @@ namespace ChessApp.Applications.Models
                     break;
                 case WsTag.CreateMatch:
                     var matchDto = GameHelper.ParseObject<MatchDTO>(parsedMessage.Data.ToString());
-                    if (!_matchService.MatchExistAsync(_sessionId))
+                    if (_player != null)
                     {
-                        var host = _playerManager.GetPlayer(this.SessionId);
-                        var match = new Match(host);
-                        _matchService.CreateMatch(match);
+                        if (!_matchService.MatchExistAsync(_sessionId))
+                        {
+                            var host = _playerManager.GetPlayer(this.SessionId);
+                            var match = new Match(host, matchDto.Title);
+                            _matchService.CreateMatch(match);
+                            _logger.Info($"Player {host._player.Username} created a match");
+                        }
+                        else
+                        {
+                            this.SendMessage(GameHelper.SerializedObject(WsResponse.Fail<string>("You already created a match", null)));
+                        }
+                    }else{
+                        this.SendMessage(GameHelper.SerializedObject(WsResponse.Unauthorized<string>("You are not allowed to do this, please login", null)));
                     }
+
                     break;
                 case WsTag.CancelMatch:
                     break;
                 case WsTag.GetLobbies:
                     var matches = _matchService.GetMatches();
+                    var response = WsResponse.ServerResponse<List<LobbyMatchDTO>>("Get all match", _mapper.Map<List<LobbyMatchDTO>>(matches), ResponseTag.GetLobbies);
+                    this.SendMessage(GameHelper.SerializedObject(response));
                     break;
                 case WsTag.InitBoard:
                     break;

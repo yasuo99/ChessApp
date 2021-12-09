@@ -1,5 +1,6 @@
 using System;
 using System.Net;
+using AutoMapper;
 using ChessApp.Applications.Interfaces;
 using ChessApp.Applications.Models;
 using NetCoreServer;
@@ -14,18 +15,20 @@ namespace ChessApp.Applications.Handlers
         private readonly IPlayerManager _playerManager;
         private readonly IPlayerService _playerService;
         private readonly IMatchService _matchService;
-        public WsGameServer(IPAddress address, int port, ILogging logging, IPlayerManager playerManager, IMatchService matchService, IPlayerService playerService) : base(address, port)
+        private readonly IMapper _mapper;
+        public WsGameServer(IPAddress address, int port, ILogging logging, IPlayerManager playerManager, IMatchService matchService, IPlayerService playerService, IMapper mapper) : base(address, port)
         {
             _port = port;
             _logging = logging;
             _playerManager = playerManager;
             _matchService = matchService;
             _playerService = playerService;
+            _mapper = mapper;
         }
         protected override TcpSession CreateSession()
         {
             _logging.Info($"New connected {this.Id}");
-            User user = new User(this, _logging, _matchService, _playerManager);
+            User user = new User(this, _logging, _matchService, _playerManager, _mapper);
             _playerManager.AddPlayer(user);
             return user;
         }
