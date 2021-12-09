@@ -82,6 +82,9 @@ namespace ChessApp
                     parameter.Add("@password", player.Password, DbType.String);
                     dapperService.Execute<Player>($"Insert into player(id, username,password, wincount, losecount, drawcount) values(@id,@username, @password, 0, 0, 0)", parameter, commandType: CommandType.Text);
                 }
+                if(cmd == "ping"){
+                    wsGameServer.SendAll("This is message from server");
+                }
                 if (cmd == "check")
                 {
                     var player = new Player

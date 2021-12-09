@@ -1,0 +1,1 @@
+This project is my first online game using .Net core as back-end and React Js as front-end.

@@ -63,7 +63,7 @@ namespace ChessApp.Applications.Models
                         }
                         else
                         {
-                            this.SendMessage($"Login failed, No player found");
+                            this.SendMessage(GameHelper.SerializedObject(WsResponse.Fail<string>($"Can't find player with username {loginData.Username}", null)));
                         }
                     }
                     else
