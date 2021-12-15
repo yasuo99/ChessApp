@@ -254,6 +254,7 @@ const PlayGround = ({ }) => {
     }
     const renderBoard = () => {
         boardInit = true;
+        console.log(board);
         return (
             <div className="container border p-4">
                 {board.map((row, idx) => {

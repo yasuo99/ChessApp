@@ -29,9 +29,19 @@ namespace ChessApp.Applications.Handlers
             _matchManager.AddMatch(match);
         }
 
+        public Match GetMatch(Guid matchId)
+        {
+            return _matchManager.GetMatch(matchId);
+        }
+
         public IEnumerable<Match> GetMatches()
         {
             return _matchManager.GetMatches();
+        }
+
+        public Match InitMatch(Guid matchId)
+        {
+            return _matchManager.InitMatch(matchId);
         }
 
         public bool MatchExistAsync(Guid matchId)
