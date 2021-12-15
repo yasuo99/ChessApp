@@ -91,9 +91,8 @@ namespace ChessApp.Applications.Models
                             var host = _playerManager.GetPlayer(this.SessionId);
                             host.Side = ChessSide.Black;
                             var match = new Match(host, matchDto.Title);
-                            _matchService.CreateMatch(match);
-                            match = _matchService.InitMatch(match.MatchId);
-
+                             match = _matchService.InitMatch(match.MatchId);
+                            _matchService.CreateMatch(match);                    
                             _logger.Info($"Player {host._player.Username} created a match");
                         }
                         else
@@ -115,7 +114,9 @@ namespace ChessApp.Applications.Models
                     this.SendMessage(GameHelper.SerializedObject(response));
                     break;
                 case WsTag.StartMatch:
-
+                    var startMatchId = GameHelper.ParseObject<Guid>(parsedMessage.Data.ToString());
+                    var startMatch = _matchService.GetMatch(startMatchId);
+                    _matchService.StartMatch(startMatchId);
                     break;
                 case WsTag.MoveChess:
                     var moveChessData = GameHelper.ParseObject<MoveChessDTO>(parsedMessage.Data.ToString());

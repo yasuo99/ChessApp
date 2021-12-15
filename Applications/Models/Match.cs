@@ -97,6 +97,9 @@ namespace ChessApp.Applications.Models
                 this._title = title;
             }
         }
+        public void SetStatus(MatchStatus status){
+            this._status = status;
+        }
         public void SetPause(bool value)
         {
             this._isPause = value;

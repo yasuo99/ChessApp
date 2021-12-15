@@ -58,5 +58,10 @@ namespace ChessApp.Applications.Handlers
         {
             throw new NotImplementedException();
         }
+
+        public bool StartMatch(Guid matchId)
+        {
+            return _matchManager.StartMatch(matchId);
+        }
     }
 }

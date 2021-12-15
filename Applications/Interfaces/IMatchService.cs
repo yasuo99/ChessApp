@@ -20,5 +20,6 @@ namespace ChessApp.Applications.Interfaces
         bool PlayerMatchExistAsync(Guid hostId);
         bool CancelMatch(Guid hostId);
         bool StartMatch(Guid hostId, Guid opponentId);
+        bool StartMatch(Guid matchId);
     }
 }

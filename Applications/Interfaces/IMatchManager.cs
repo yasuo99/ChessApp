@@ -9,6 +9,7 @@ namespace ChessApp.Applications.Interfaces
     public interface IMatchManager
     {
         IEnumerable<Match> GetMatches();
+        bool StartMatch(Guid matchId);
         Match InitMatch(Guid matchId);
         Match GetMatch(string hostId);
         Match GetMatch(Guid matchId);

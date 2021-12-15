@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using ChessApp.Applications.Interfaces;
+using ChessApp.Applications.Messaging.Constants;
 using ChessApp.Applications.Models;
 
 namespace ChessApp.Applications.Handlers
@@ -67,6 +68,16 @@ namespace ChessApp.Applications.Handlers
             }
             return null;
             
+        }
+
+        public bool StartMatch(Guid matchId)
+        {
+            var result = _matches.TryGetValue(matchId, out var match);
+            if(result){
+                match.SetStatus(MatchStatus.Playing);
+                _matches[matchId] = match;
+            }
+            return false;
         }
     }
 }
