@@ -6,6 +6,7 @@ namespace ChessApp.Applications.Messaging
         public static WsResponse<T> Fail<T>(string message, T data) => new WsResponse<T>(message, data, ResponseTag.Fail);
         public static WsResponse<T> Unauthorized<T>(string message, T data) => new WsResponse<T>(message, data, ResponseTag.Unauthorized);
         public static WsResponse<T> ServerResponse<T>(string message, T data, ResponseTag tag) => new WsResponse<T>(message, data, tag);
+        public static WsResponse<T> MoveChess<T>(string message, T data) => new WsResponse<T>(message, data, ResponseTag.MoveChess);
     }
     public class WsResponse<T>{
         public string Tag;
@@ -26,6 +27,7 @@ namespace ChessApp.Applications.Messaging
         Fail,
         Unauthorized,
         BadRequest,
-        GetLobbies
+        GetLobbies,
+        MoveChess
     }
 }

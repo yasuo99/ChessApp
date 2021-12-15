@@ -32,7 +32,6 @@ namespace ChessApp
                 services.AddScoped<IDapperService, DapperService>();
                 services.AddScoped<IPlayerService, PlayerService>();
                 services.AddScoped<IPlayerManager, PlayerManager>();
-
             });
             return host;
         }
@@ -76,7 +75,7 @@ namespace ChessApp
                     var player = new Player
                     {
                         Id = Guid.NewGuid(),
-                        Username = "Thanhpro1233",
+                        Username = "Test",
                         Password = "Thanhpro1@",
                     };
                     DynamicParameters parameter = new DynamicParameters();

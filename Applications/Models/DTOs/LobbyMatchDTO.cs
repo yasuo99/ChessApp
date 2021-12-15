@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using ChessApp.Applications.Messaging.Constants;
 
 namespace ChessApp.Applications.Models.DTOs{

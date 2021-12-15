@@ -21,6 +21,7 @@ namespace ChessApp.Applications.Models
         private Guid _sessionId;
         public bool IsDisconnected;
         private Player _player;
+        public ChessSide Side { get; set; }
         public Player Player
         {
             get
@@ -88,15 +89,20 @@ namespace ChessApp.Applications.Models
                         if (!_matchService.MatchExistAsync(_sessionId))
                         {
                             var host = _playerManager.GetPlayer(this.SessionId);
+                            host.Side = ChessSide.Black;
                             var match = new Match(host, matchDto.Title);
                             _matchService.CreateMatch(match);
+                            match = _matchService.InitMatch(match.MatchId);
+
                             _logger.Info($"Player {host._player.Username} created a match");
                         }
                         else
                         {
                             this.SendMessage(GameHelper.SerializedObject(WsResponse.Fail<string>("You already created a match", null)));
                         }
-                    }else{
+                    }
+                    else
+                    {
                         this.SendMessage(GameHelper.SerializedObject(WsResponse.Unauthorized<string>("You are not allowed to do this, please login", null)));
                     }
 
@@ -108,13 +114,18 @@ namespace ChessApp.Applications.Models
                     var response = WsResponse.ServerResponse<List<LobbyMatchDTO>>("Get all match", _mapper.Map<List<LobbyMatchDTO>>(matches), ResponseTag.GetLobbies);
                     this.SendMessage(GameHelper.SerializedObject(response));
                     break;
-                case WsTag.InitBoard:
-                    break;
                 case WsTag.StartMatch:
 
                     break;
                 case WsTag.MoveChess:
-
+                    var moveChessData = GameHelper.ParseObject<MoveChessDTO>(parsedMessage.Data.ToString());
+                    var currentMatch = _matchService.GetMatch(moveChessData.MatchId);
+                    if (currentMatch != null)
+                    {
+                        var moveResponse = GameHelper.SerializedObject(WsResponse.MoveChess<MoveChessDTO>("Player move chess", moveChessData));
+                        currentMatch.Host.SendMessage(moveResponse);
+                        currentMatch.Opponent.SendMessage(moveResponse);
+                    }
                     break;
                 case WsTag.PauseMatch:
                     break;
@@ -141,6 +152,10 @@ namespace ChessApp.Applications.Models
         {
             var mes = GameHelper.SerializedObject(wsMessage);
             return this.SendMessage(mes);
+        }
+        public void SetSide(ChessSide side)
+        {
+            Side = side;
         }
     }
 }

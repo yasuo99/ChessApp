@@ -7,6 +7,7 @@ namespace ChessApp.Applications.Messaging
         GetLobbies,
         JoinLobby,
         CreateMatch,
+        ChangeSide,
         CancelMatch,
         StartMatch,
         InitBoard,

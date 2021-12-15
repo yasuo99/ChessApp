@@ -56,5 +56,17 @@ namespace ChessApp.Applications.Handlers
         {
             return _matches.Select(sel => sel.Value).ToList();
         }
+
+        public Match InitMatch(Guid matchId)
+        {
+            var result = _matches.TryGetValue(matchId, out var match);
+            if(result){
+                match.InitMatch();
+                _matches[matchId] = match;
+                return match;
+            }
+            return null;
+            
+        }
     }
 }

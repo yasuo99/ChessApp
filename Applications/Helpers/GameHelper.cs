@@ -8,7 +8,9 @@ namespace ChessApp.Applications.Helpers
             return JsonConvert.DeserializeObject<T>(serializedString);
         }
         public static string SerializedObject<T>(T subject){
-            return JsonConvert.SerializeObject(subject);
+            var jsonSerializeSettings = new JsonSerializerSettings();
+            jsonSerializeSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            return JsonConvert.SerializeObject(subject, jsonSerializeSettings);
         }
     }
 }
